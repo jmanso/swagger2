@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,14 +62,14 @@ class CustomerServiceController {
 	
 	@ApiResponses(value={
 			@ApiResponse(code=200, message="Well Done", response=Customer.class, responseContainer="List")})
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public List<Customer> findCustomers() {
 		return customerRepository.findAll();
 	}
 	
 	@ApiResponses(value={
 			@ApiResponse(code=200, message="Well Done", response=Customer.class)})
-	@RequestMapping(value="/{customerId}", method=RequestMethod.GET)
+	@RequestMapping(value="/{customerId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Customer findOneCustomer(@PathVariable final Long customerId) {
 		return customerRepository.findOne(customerId);
 	}
