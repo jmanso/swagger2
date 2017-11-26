@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -33,13 +35,13 @@ public class CustomerServiceApplication {
 	public CommandLineRunner runExecute(CustomerRepository customerRepository) {
 		return customers -> {
 			customerRepository.save(new CustomerBuilder()
-					 .name("Juan").lastName("Manso").cusNum("1234").build());
+					 .name("Juan").lastName("Perez").cusNum("XX-12765-Z").build());
 			
 			customerRepository.save(new CustomerBuilder()
-					 .name("Lucia").lastName("Manso").cusNum("4567").build());
+					 .name("Lucia").lastName("Alvarez").cusNum("XX-12345-R").build());
 			
 			customerRepository.save(new CustomerBuilder()
-					 .name("Jane").lastName("Connelly").cusNum("4564").build());
+					 .name("Scott").lastName("Smith").cusNum("XX-12345-T").build());
 		};
 	}
 }
@@ -72,12 +74,12 @@ class CustomerServiceController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public void saveCustomer(@RequestBody Customer customer) {
+	public void saveCustomer(@ApiParam(value="JSON with Person to create", required=true) @RequestBody Customer customer) {
 		customerRepository.save(customer);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT)
-	public void modifyCustomer(@RequestBody Customer customer) {
+	public void modifyCustomer(@ApiParam(value="JSON with Person to modify", required=true) @RequestBody Customer customer) {
 		customerRepository.save(customer);
 	}
 	
@@ -94,11 +96,18 @@ interface CustomerRepository extends JpaRepository<Customer, Long> {
 
 @Entity
 class Customer {
-	
+		
 	@Id @GeneratedValue
+	@ApiModelProperty(value="Customer identifier", required=true, example="1", position=1)
 	private Long id;
+
+	@ApiModelProperty(value="Customer Name", example="Juan", position=2)
 	private String name;
+
+	@ApiModelProperty(value="Customer LastName", example="Perez", position=3)
 	private String lastName;
+
+	@ApiModelProperty(value="Customer number", example="XX-12345-T", position=4)
 	private String cusNum;
 
 	public Customer() {
